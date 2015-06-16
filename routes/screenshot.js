@@ -6,6 +6,23 @@ var logger = require('winston');
 var slack = require('../lib/slack');
 var db = require('../lib/db');
 
+/**
+ * Browserstack hits this endpoint when the task is done
+ */
+router.post('/cb', function(req, res, next){
+  var data = req.body;
+  var job = db.get(data.id);
+  job.status = 'completed';
+  db.set(data.id, job);
+
+  slack.sendEndMsg({
+    app: job.app,
+    job_id: data.id,
+    branch: job.branch
+  });
+
+  res.send(job)
+})
 
 /**
  * POST request by wercker
