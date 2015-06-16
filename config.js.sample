@@ -7,10 +7,12 @@ var config = {
   'domain': domain,
 
   'slack_enabled': false,
+  'slack_enabled': false,
   'slack_url': SLACK_URL,
   'slack_username': 'Bozo',
   'slack_channel': '#tech',
 
+  'browserstack_enabled': false,
   'browserstack_key': BROWSERSTACK_KEY,
   'browserstack_user': BROWSERSTACK_USER,
   'browserstack_sc_url': 'https://www.browserstack.com/screenshots/',
