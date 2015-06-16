@@ -4,24 +4,26 @@ var config = require('../config');
 var Screenshot = require('../lib/screenshot');
 var logger = require('winston');
 var slack = require('../lib/slack');
+var db = require('../lib/db');
+
 
 /**
  * POST request by wercker
  */
-router.post('/:id', function(req, res, next) {
-  var id = req.params.id;
-  var branch = req.params.branch;
+router.post('/:appid', function(req, res, next) {
+  var appid = req.params.appid;
+  var branch = req.body.branch;
 
-  if(!config.allowed_urls[id]){
+  if(!config.allowed_urls[appid]){
     res.json({
       error: 'invalid id passed',
-      field: 'id'
+      field: 'appid'
     });
     return;
   }
 
-  var url = config.allowed_urls[id].url;
-  var app = config.allowed_urls[id].name;
+  var url = config.allowed_urls[appid].url;
+  var app = config.allowed_urls[appid].name;
   var screenshot = new Screenshot(url).shoot(function(err, job_id){
     if(err){
       logger.error(err);
@@ -30,7 +32,19 @@ router.post('/:id', function(req, res, next) {
       })
       return;
     }
-    slack.sendStartMsg(app, branch, job_id);
+
+    db.set(job_id, {
+      status: 'pending',
+      appid: appid,
+      app: app,
+      branch: branch
+    });
+
+    slack.sendStartMsg({
+      app: app,
+      job_id: job_id,
+      branch: branch
+    });
     res.json({
       'status': 'Job queued',
       'job_id': job_id,
