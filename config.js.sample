@@ -1,0 +1,6 @@
+var config = {
+  'title': 'Bozo',
+  'description': 'Razorpay\'s in house visual regression testing tool.<br>What a mouthful. Chocolate frog?'
+}
+
+module.exports = config;
