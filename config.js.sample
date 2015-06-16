@@ -1,6 +1,32 @@
+var domain = DOMAIN;
+
 var config = {
   'title': 'Bozo',
-  'description': 'Razorpay\'s in house visual regression testing tool.<br>What a mouthful. Chocolate frog?'
+  'description': 'Razorpay\'s in house visual regression testing tool.<br>What a mouthful. Chocolate frog?',
+
+  'domain': domain,
+
+  'browserstack_key': BROWSERSTACK_KEY,
+  'browserstack_user': BROWSERSTACK_USER,
+  'browserstack_sc_url': 'https://www.browserstack.com/screenshots/',
+  'browserstack_settings': {
+    'win_res': '1024x768',
+    'mac_res': '1920x1080',
+    'quality': 'compressed',
+    'wait_time': 5,
+    'orientation': 'portrait',
+    'callback_url': domain + CALLBACK_ENDPOINT
+  },
+
+  /**
+   * sha256(app+'some salt');
+   */
+  'allowed_urls': {
+    THE_HASH : {
+      'id': APP_ID,
+      'url': URL
+    }
+  }
 }
 
 module.exports = config;
