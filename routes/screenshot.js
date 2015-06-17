@@ -65,7 +65,7 @@ router.post('/:appid', function(req, res, next) {
     res.json({
       'status': 'Job queued',
       'job_id': job_id,
-      'url': config.browserstack_sc_url + '.json'
+      'url': config.browserstack_sc_url + job_id + '.json'
     });
   });
 });
