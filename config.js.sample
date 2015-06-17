@@ -7,7 +7,6 @@ var config = {
   'domain': domain,
 
   'slack_enabled': false,
-  'slack_enabled': false,
   'slack_url': SLACK_URL,
   'slack_username': 'Bozo',
   'slack_channel': '#tech',
@@ -30,7 +29,7 @@ var config = {
    */
   'allowed_urls': {
     THE_HASH : {
-      'id': APP_ID,
+      'name': APP_ID,
       'url': URL
     }
   }
