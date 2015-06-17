@@ -5,6 +5,7 @@ var Screenshot = require('../lib/screenshot');
 var logger = require('winston');
 var slack = require('../lib/slack');
 var db = require('../lib/db');
+var Regression = require('../lib/regression');
 
 /**
  * Browserstack hits this endpoint when the task is done
@@ -15,12 +16,9 @@ router.post('/cb', function(req, res, next){
   job.status = 'completed';
   db.set(data.id, job);
 
-  slack.sendEndMsg({
-    app: job.app,
-    job_id: data.id,
-    branch: job.branch
-  });
+  logger.info('Received callback for job: ', data.id);
 
+  new Regression(data.id, data);
   res.send(job)
 })
 
