@@ -17,18 +17,22 @@ router.post('/cb', function(req, res, next){
   logger.info('Received callback for job: ', data.id);
 
   var job = db.get(job_id);
-  job.status = 'completed';
+  job.state = 'completed';
+  job.data = data;
   db.set(data.id, job);
 
   var mainJob = db.get(job.parent);
   mainJob.completed++;
 
   if(mainJob.completed === mainJob.jobs.length){
-    mainJob.status = 'completed';
+    mainJob.state = 'completed';
+  }
+  db.set(job.parent, mainJob);
+
+  if(mainJob.state === 'completed'){
     new Regression(job.parent);
   }
 
-  db.set(job.parent, mainJob);
   res.send(job)
 })
 
@@ -64,14 +68,14 @@ router.post('/:appid', function(req, res, next) {
       app: app,
       branch: branch,
       jobs: job_ids,
-      status: 'pending',
+      state: 'pending',
       completed: 0
     });
 
     for(var i in job_ids){
       db.set(job_ids[i], {
         parent: mainID,
-        status: 'pending'
+        state: 'pending'
       })
     }
 
@@ -82,7 +86,7 @@ router.post('/:appid', function(req, res, next) {
     });
 
     res.json({
-      'status': 'Job queued',
+      'state': 'Job queued',
       'job_id': job_ids
     });
   });
