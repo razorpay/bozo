@@ -12,13 +12,23 @@ var Regression = require('../lib/regression');
  */
 router.post('/cb', function(req, res, next){
   var data = req.body;
-  var job = db.get(data.id);
-  job.status = 'completed';
-  db.set(data.id, job);
+  var job_id = data.id;
 
   logger.info('Received callback for job: ', data.id);
 
-  new Regression(data.id, data);
+  var job = db.get(job_id);
+  job.status = 'completed';
+  db.set(data.id, job);
+
+  var mainJob = db.get(job.parent);
+  mainJob.completed++;
+
+  if(mainJob.completed === mainJob.jobs.length){
+    mainJob.status = 'completed';
+    new Regression(job.parent);
+  }
+
+  db.set(job.parent, mainJob);
   res.send(job)
 })
 
@@ -39,7 +49,7 @@ router.post('/:appid', function(req, res, next) {
 
   var url = config.allowed_urls[appid].url;
   var app = config.allowed_urls[appid].name;
-  var screenshot = new Screenshot(url).shoot(function(err, job_id){
+  var screenshot = new Screenshot(url).shoot(function(err, job_ids){
     if(err){
       logger.error(err);
       res.json({
@@ -48,22 +58,32 @@ router.post('/:appid', function(req, res, next) {
       return;
     }
 
-    db.set(job_id, {
-      status: 'pending',
+    var mainID = app + '/' + Math.random();
+    db.set(mainID, {
       appid: appid,
       app: app,
-      branch: branch
+      branch: branch,
+      jobs: job_ids,
+      status: 'pending',
+      completed: 0
     });
+
+    for(var i in job_ids){
+      db.set(job_ids[i], {
+        parent: mainID,
+        status: 'pending'
+      })
+    }
 
     slack.sendStartMsg({
       app: app,
-      job_id: job_id,
+      job_ids: job_ids,
       branch: branch
     });
+
     res.json({
       'status': 'Job queued',
-      'job_id': job_id,
-      'url': config.browserstack_sc_url + job_id + '.json'
+      'job_id': job_ids
     });
   });
 });
