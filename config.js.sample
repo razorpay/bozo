@@ -5,6 +5,7 @@ var config = {
   'description': 'Razorpay\'s in house visual regression testing tool.<br>What a mouthful. Chocolate frog?',
 
   'domain': domain,
+  'batch_size': 25, // max = 25
 
   'slack_enabled': false,
   'slack_url': SLACK_URL,
