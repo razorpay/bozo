@@ -48,6 +48,8 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   winston.level = 'debug';
+  winston.info('Logger level debug');
+  winston.info('App environment set to development');
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -55,6 +57,14 @@ if (app.get('env') === 'development') {
       error: err
     });
   });
+}
+else if(process.env.LOGGER){
+  winston.level = process.env.LOGGER;
+  winston.info('Logger level', process.env.LOGGER);
+  winston.info('App environment set to production');
+}
+else {
+  winston.info('App environment set to production');
 }
 
 // production error handler
