@@ -49,8 +49,6 @@ router.get('/report/:id', function(req, res, next){
     var signature = data.stats.noMatchData[i];
     data.screenshots[signature].prev_image_url = prevData.screenshots[signature].image_url;
     report.push(data.screenshots[signature]);
-    report.push(data.screenshots[signature]);
-    report.push(data.screenshots[signature]);
   }
   res.render('report', {
     info: data,
