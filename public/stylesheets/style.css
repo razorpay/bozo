@@ -1,14 +1,63 @@
 body {
   padding: 200px 50px 50px;
   font: 16px "Source Sans Pro", "Lucida Grande", Helvetica, Arial, sans-serif;
-  width: 500px;
   margin: auto;
   text-align: center;
   background-image: url('/images/bg.jpg');
   background-size: cover;
+  background-attachment: fixed;
   color: white;
+}
+
+body.report {
+  padding-top: 50px;
+}
+
+hr {
+  width: 200px;
+}
+
+.report .logo {
+  width: 100px;
+  margin-bottom: 50px;
+}
+
+.report .app {
+  text-transform: capitalize;
+}
+
+.report h1,
+.report h2,
+.report h3,
+.report h4,
+.report h5,
+.report h6 {
+  margin: 5px;
+  font-weight: normal;
+}
+
+.shot {
+  margin: 70px 0;
+}
+
+.shot h3 {
+  margin: 5px 0 20px 0;
+  text-transform: capitalize;
+}
+
+.report table {
+  margin: 50px auto;
+}
+
+.report th, .report td {
+  width: 100px;
 }
 
 a {
   color: #00B7FF;
+}
+
+.shot img {
+  max-width: 45%;
+  padding: 0px 10px;
 }

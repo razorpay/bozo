@@ -36,6 +36,28 @@ router.post('/cb', function(req, res, next){
   res.send(job)
 })
 
+router.get('/report/:id', function(req, res, next){
+  var job_id = req.params.id;
+  var data = db.getJobData(job_id);
+  data.screenshots = db.indexJobData(data);
+
+  var prevData = db.getJobData(data.last);
+  prevData.screenshots = db.indexJobData(prevData);
+
+  var report = [];
+  for(var i in data.stats.noMatchData){
+    var signature = data.stats.noMatchData[i];
+    data.screenshots[signature].prev_image_url = prevData.screenshots[signature].image_url;
+    report.push(data.screenshots[signature]);
+    report.push(data.screenshots[signature]);
+    report.push(data.screenshots[signature]);
+  }
+  res.render('report', {
+    info: data,
+    report: report
+  });
+})
+
 /**
  * POST request by wercker
  */
@@ -62,7 +84,7 @@ router.post('/:appid', function(req, res, next) {
       return;
     }
 
-    var mainID = app + '/' + Math.random();
+    var mainID = app + '-' + Math.random();
     db.set(mainID, {
       appid: appid,
       app: app,

@@ -1,0 +1,30 @@
+extends layout
+
+block vars
+  - bodyClasses.push('report');
+
+block content
+  h1.app= info.app
+  h2= info.branch
+
+  hr
+
+  table
+    tr
+      th Total
+      th Match
+      th No Match
+      th Skipped
+    tr
+      td= info.stats.total
+      td= info.stats.match
+      td= info.stats.noMatch
+      td= info.stats.skipped
+
+  each shot in report
+    div.shot
+      h3= [shot.os, shot.os_version, shot.browser, shot.browser_version, device].join(' ')
+      a(href=shot.image_url, target="_blank")
+        img(src=shot.image_url)
+      a(href=shot.prev_image_url, target="_blank")
+        img(src=shot.prev_image_url)
