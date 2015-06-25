@@ -62,6 +62,7 @@ router.get('/report/:id', function(req, res, next){
 router.post('/:appid', function(req, res, next) {
   var appid = req.params.appid;
   var branch = req.body.branch;
+  var target = req.body.target;
   var mainID = req.body.commit;
   if(!mainID){
     mainID = app + '-' + Math.random();
@@ -75,7 +76,7 @@ router.post('/:appid', function(req, res, next) {
     return;
   }
 
-  var url = config.allowed_urls[appid].url;
+  var url = config.allowed_urls[appid]['url'][target];
   var app = config.allowed_urls[appid].name;
   var screenshot = new Screenshot(url).shoot(function(err, job_ids){
     if(err){
