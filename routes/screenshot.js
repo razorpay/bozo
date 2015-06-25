@@ -62,6 +62,10 @@ router.get('/report/:id', function(req, res, next){
 router.post('/:appid', function(req, res, next) {
   var appid = req.params.appid;
   var branch = req.body.branch;
+  var mainID = req.body.commit;
+  if(!mainID){
+    mainID = app + '-' + Math.random();
+  }
 
   if(!config.allowed_urls[appid]){
     res.json({
@@ -82,7 +86,6 @@ router.post('/:appid', function(req, res, next) {
       return;
     }
 
-    var mainID = app + '-' + Math.random();
     db.set(mainID, {
       appid: appid,
       app: app,
