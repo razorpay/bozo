@@ -31,7 +31,10 @@ var config = {
   'allowed_urls': {
     THE_HASH : {
       'name': APP_ID,
-      'url': URL
+      'url': {
+        'beta': BETA_URL,
+        'production': PROD_URL
+      }
     }
   }
 }
