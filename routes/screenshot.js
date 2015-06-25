@@ -39,10 +39,10 @@ router.post('/cb', function(req, res, next){
 router.get('/report/:id', function(req, res, next){
   var job_id = req.params.id;
   var data = db.getJobData(job_id);
-  data.screenshots = db.indexJobData(data);
+  data.screenshots = db.indexJobData(data).indexed;
 
   var prevData = db.getJobData(data.last);
-  prevData.screenshots = db.indexJobData(prevData);
+  prevData.screenshots = db.indexJobData(prevData).indexed;
 
   var report = [];
   for(var i in data.stats.noMatchData){
